@@ -10,7 +10,7 @@ namespace Backend.Model
     [Table("агроном_ЭлементарныеУчастки_ИсторияПосевов")]
     public class ElementaryAreaHistoryIItem
     {
-        [Column("EA_ID")]
+        [Key, Column("EA_ID")]
         public int Id { get; set; }
         [Column("Year")]
         public int Year { get; set; }

@@ -10,7 +10,7 @@ namespace Backend.Model
     [Table("агроном_АгроКультуры")]
     public class AgroCultureModel
     {
-        [Column("ID")]
+        [Key, Column("ID")]
         public int Id { get; set; }
         [Column("Name")]
         public string Name { get; set; }
