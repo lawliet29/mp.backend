@@ -23,9 +23,20 @@ namespace Backend.Controllers
         }
 
         [HttpGet, Route("fields/{id}")]
-        public IHttpActionResult GetById(int id)
+        public IHttpActionResult GetByIdFullModel(int id)
         {
-            var model = _service.GetById(id);
+            var model = _service.GetByIdFullModel(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(model);
+        }
+
+        public IHttpActionResult GetByIdShort(int id)
+        {
+            var model = _service.GetByIdShort(id);
             if (model == null)
             {
                 return NotFound();
@@ -37,7 +48,7 @@ namespace Backend.Controllers
         [HttpGet, Route("fields/{id}/history")]
         public IHttpActionResult GetHistoryById(int id)
         {
-            var model = _service.GetById(id);
+            var model = _service.GetHistoryById(id);
             if (model == null)
             {
                 return NotFound();

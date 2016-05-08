@@ -10,7 +10,8 @@ namespace Backend.Services
     public interface IFieldService
     {
         ICollection<FieldModel> List();
-        FieldFullModel GetById(int id);
+        FieldFullModel GetByIdFullModel(int id);
+        FieldModel GetByIdShort(int id);
         ICollection<FieldHistoryItem> GetHistoryById(int id);
         
     }
@@ -26,9 +27,18 @@ namespace Backend.Services
             };
         }
 
-        public FieldFullModel GetById(int id)
+        public FieldFullModel GetByIdFullModel(int id)
         {
             return new FieldFullModel
+            {
+                Id = id,
+                Name = "testt"
+            };
+        }
+
+        public FieldModel GetByIdShort(int id)
+        {
+            return new FieldModel
             {
                 Id = id,
                 Name = "testt"

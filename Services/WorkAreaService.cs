@@ -10,7 +10,8 @@ namespace Backend.Services
     public interface IWorkAreaService
     {
         ICollection<WorkAreaModel> List();
-        WorkAreaFullModel GetById(int id);
+        WorkAreaFullModel GetByIdFullModel(int id);
+        WorkAreaModel GetByIdShort(int id);
         ICollection<WorkAreaHistoryItem> GetHistoryById(int id);
     }
 
@@ -25,7 +26,7 @@ namespace Backend.Services
             };
         }
 
-        public WorkAreaFullModel GetById(int id)
+        public WorkAreaFullModel GetByIdFullModel(int id)
         {
             return new WorkAreaFullModel
             {
@@ -35,12 +36,21 @@ namespace Backend.Services
             };
         }
 
+        public WorkAreaModel GetByIdShort(int id)
+        {
+            return new WorkAreaModel
+            {
+                Id = id,
+                Name = "testt"
+            };
+        }
+
         public ICollection<WorkAreaHistoryItem> GetHistoryById(int id)
         {
             return new[]
             {
-                new WorkAreaHistoryItem() {Id = 1, Year = 2011, AgroCultureId = 2, WorkAreaYield = 33, WorkAreaSeedMass = 44},
-                new WorkAreaHistoryItem() {Id = 2, Year = 2012, AgroCultureId = 3, WorkAreaYield = 55, WorkAreaSeedMass = 66}
+                new WorkAreaHistoryItem() {Id = 1, Year = 2011, AgroCulture = "", WorkAreaYield = 33, WorkAreaSeedMass = 44},
+                new WorkAreaHistoryItem() {Id = 2, Year = 2012, AgroCulture = "", WorkAreaYield = 55, WorkAreaSeedMass = 66}
             };
         }
     }

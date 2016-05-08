@@ -1,28 +1,28 @@
-﻿using System;
+﻿using Backend.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Backend.Services;
 
 namespace Backend.Controllers
 {
-    public class WorkAreaController : ApiController
+    public class AgroCultureController : ApiController
     {
-        private readonly IWorkAreaService _service;
-        public WorkAreaController(IWorkAreaService service)
+        private readonly IAgroCultureService _service;
+        public AgroCultureController(IAgroCultureService service)
         {
             _service = service;
         }
 
-        [HttpGet, Route("workAreas")]
+        [HttpGet, Route("agroCulture")]
         public IHttpActionResult List()
         {
             return Ok(_service.List());
         }
 
-        [HttpGet, Route("workAreas/{id}")]
+        [HttpGet, Route("agroCulture/{id}")]
         public IHttpActionResult GetByIdFullModel(int id)
         {
             var model = _service.GetByIdFullModel(id);
@@ -37,18 +37,6 @@ namespace Backend.Controllers
         public IHttpActionResult GetByIdShort(int id)
         {
             var model = _service.GetByIdShort(id);
-            if (model == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(model);
-        }
-
-        [HttpGet, Route("workAreas/{id}/history")]
-        public IHttpActionResult GetHistoryById(int id)
-        {
-            var model = _service.GetHistoryById(id);
             if (model == null)
             {
                 return NotFound();

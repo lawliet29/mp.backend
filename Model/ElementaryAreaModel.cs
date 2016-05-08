@@ -23,14 +23,42 @@ namespace Backend.Model
         [Column("S")]
         public int PlanarArea { get; set; }
         [Column("Регион")]
-        public int Region { get; set; }
+        public int RegionId { get; set; }
+        [RelationColumn(
+            ReferenceId = "Регион",
+            FromTable = "_Регионы",
+            PurposeId = "ID",
+            FromColumn = "Name"]
+        )]
+        public string Region { get; set; }
         [Column("Действующий")]
         public bool Active { get; set; }
         [Column("SoilKind")]
-        public int SoilKind { get; set; }
+        public int SoilKindId { get; set; }
+        [RelationColumn(
+            ReferenceId = "SoilKind", 
+            FromTable = "_ВидПочвы",
+            PurposeId = "ID",
+            FromColumn = "TypeName"
+        )]
+        public string SoilKind { get; set; }
         [Column("SoilClass")]
-        public int SoilClass { get; set; }
+        public int SoilClassId { get; set; }
+        [RelationColumn(
+            ReferenceId = "SoilClass",
+            FromTable = "_КлассПочвы",
+            PurposeId = "ID",
+            FromColumn = "TypeName"
+        )]
+        public string SoilClass { get; set; }
         [Column("SoilType")]
-        public int SoilType { get; set; }
+        public int SoilTypeId { get; set; }
+        [RelationColumn(
+            ReferenceId = "SoilType",
+            FromTable = "_ТипыПочвы",
+            PurposeId = "ID",
+            FromColumn = "TypeName"
+        )]
+        public string SoilType { get; set; }
     }
 }

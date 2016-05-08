@@ -15,6 +15,13 @@ namespace Backend.Model
         [Column("Year")]
         public int Year { get; set; }
         [Column("CropID")]
-        public int CultureId { get; set; }
+        public int CropId { get; set; }
+        [RelationColumn(
+            ReferenceId = "CropID",
+            FromTable = "агроном_АгроКультуры",
+            PurposeId = "ID",
+            FromColumn = "Name"
+        )]
+        public string AgroCulture { get; set; }
     }
 }

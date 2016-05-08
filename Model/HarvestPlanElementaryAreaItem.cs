@@ -7,25 +7,22 @@ using System.Threading.Tasks;
 
 namespace Backend.Model
 {
-    [Table("агроном_РабочиеУчестки_ИсторияПосевов")]
-    public class WorkAreaHistoryItem
+    [Table("агроном_ПланУрожая2")]
+    public class HarvestPlanElementaryAreaItem
     {
-        [Column("WorkAreaID")]
+        [Column("PlanID")]
         public int Id { get; set; }
-        [Column("Year")]
-        public int Year { get; set; }
         [Column("AgroCultureID")]
         public int AgroCultureId { get; set; }
         [RelationColumn(
-            ReferenceId = "AgrroCultureID",
+            ReferenceId = "AgroCultureID",
             FromTable = "агроном_АгроКультуры",
             PurposeId = "ID",
             FromColumn = "Name"
         )]
         public string AgroCulture { get; set; }
-        [Column("WorkAreaYield")]
-        public int WorkAreaYield { get; set; }
-        [Column("WorkAreaSeedMass")]
-        public int WorkAreaSeedMass { get; set; }
+        [Column("PlannedYield")]
+        public int PlannedYield { get; set; }
     }
+    
 }

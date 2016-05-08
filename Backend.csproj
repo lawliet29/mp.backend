@@ -95,27 +95,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AgroCultureController.cs" />
+    <Compile Include="Controllers\CropRotationController.cs" />
     <Compile Include="Controllers\ElementaryAreaController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\FieldController.cs" />
+    <Compile Include="Controllers\HarvestPlanController.cs" />
+    <Compile Include="Controllers\MineralFertilizerController.cs" />
+    <Compile Include="Controllers\OrganicFertilizerController.cs" />
+    <Compile Include="Controllers\PaymentCropController.cs" />
     <Compile Include="Controllers\WorkAreaController.cs" />
     <Compile Include="DiModule.cs" />
     <Compile Include="Metadata\ColumnAttribute.cs" />
+    <Compile Include="Metadata\RelationColumnAttribute.cs" />
     <Compile Include="Metadata\TableAttribute.cs" />
     <Compile Include="Model\AgroCultureModel.cs" />
+    <Compile Include="Model\CropRotationModel.cs" />
     <Compile Include="Model\ElementaryAreaHistoryIItem.cs" />
     <Compile Include="Model\ElementaryAreaModel.cs" />
     <Compile Include="Model\ElementaryAreaSoilComposition.cs" />
+    <Compile Include="Model\EmployeeModel.cs" />
     <Compile Include="Model\FieldHistoryItem.cs" />
     <Compile Include="Model\FieldModel.cs" />
+    <Compile Include="Model\HarvestPlanElementaryAreaItem.cs" />
+    <Compile Include="Model\HarvestPlanModel.cs" />
+    <Compile Include="Model\MineralFertilizerModel.cs" />
+    <Compile Include="Model\OrganicFertilizerModel.cs" />
+    <Compile Include="Model\PaymentCrop.cs" />
+    <Compile Include="Model\PaymentCropElementaryAreaItem.cs" />
     <Compile Include="Model\WorkAreaHistoryItem.cs" />
     <Compile Include="Model\WorkAreaModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DbConnectionService.cs" />
+    <Compile Include="Services\AgroCultureService.cs" />
+    <Compile Include="Services\CropRotationService.cs" />
     <Compile Include="Services\ElementaryAreaService.cs" />
-    <Compile Include="Services\EntityLoader.cs" />
+    <Compile Include="Services\EmployeeService.cs" />
     <Compile Include="Services\FieldService.cs" />
-    <Compile Include="Services\QueryBuilder.cs" />
+    <Compile Include="Services\HarvestPlanService.cs" />
+    <Compile Include="Services\MineralFertilizerService.cs" />
+    <Compile Include="Services\OrganicFertilizerService.cs" />
+    <Compile Include="Services\PaymentCropService.cs" />
     <Compile Include="Services\WorkAreaService.cs" />
   </ItemGroup>
   <ItemGroup>

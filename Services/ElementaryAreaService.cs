@@ -10,7 +10,8 @@ namespace Backend.Services
     public interface IElementaryAreaService
     {
         ICollection<ElementaryAreaModel> List();
-        ElementaryAreaFullModel GetById(int id);
+        ElementaryAreaFullModel GetByIdShort(int id);
+        ElementaryAreaFullModel GetByIdFullModel(int id);
         ICollection<ElementaryAreaHistoryIItem> GetHistoryById(int id);
         ICollection<ElementaryAreaSoilComposition> GetElAreaSoilCompositionById(int id);
         ICollection<ElementaryAreaModel> GetElementaryAreasByWorkAreaId(int id);
@@ -28,7 +29,17 @@ namespace Backend.Services
             };
         }
 
-        public ElementaryAreaFullModel GetById(int id)
+        public ElementaryAreaFullModel GetByIdShort(int id)
+        {
+            return new ElementaryAreaFullModel
+            {
+                Id = id,
+                Name = "testt",
+                Number = 42
+            };
+        }
+
+        public ElementaryAreaFullModel GetByIdFullModel(int id)
         {
             return new ElementaryAreaFullModel
             {
@@ -42,8 +53,8 @@ namespace Backend.Services
         {
             return new[]
             {
-                new ElementaryAreaHistoryIItem() {Id = 1, Year = 2011, AgroCultureId = 2, EaYield = 33, EaSeedMass = 44},
-                new ElementaryAreaHistoryIItem() {Id = 2, Year = 2012, AgroCultureId = 3, EaYield = 55, EaSeedMass = 66}
+                new ElementaryAreaHistoryIItem() {Id = 1, Year = 2011, AgroCulture = "", EaYield = 33, EaSeedMass = 44},
+                new ElementaryAreaHistoryIItem() {Id = 2, Year = 2012, AgroCulture = "", EaYield = 55, EaSeedMass = 66}
             };
         }
 

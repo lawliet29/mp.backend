@@ -24,6 +24,13 @@ namespace Backend.Model
         public bool Active { get; set; }
         [Column("CropRotationId")]
         public int CropRotationId { get; set; }
+        [RelationColumn(
+            ReferenceId = "CropRotationId",
+            FromTable = "_Севообороты_Названия",
+            PurposeId = "ID",
+            FromColumn = "Name"
+        )]
+        public string CropRotation { get; set; }
         [Column("InitialYearOfCycle")]
         public int InitialYear { get; set; }
         [Column("StartYear")]

@@ -1,28 +1,28 @@
-﻿using System;
+﻿using Backend.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Backend.Services;
 
 namespace Backend.Controllers
 {
-    public class WorkAreaController : ApiController
+    public class PaymentCropController : ApiController
     {
-        private readonly IWorkAreaService _service;
-        public WorkAreaController(IWorkAreaService service)
+        private readonly IPaymentCropService _service;
+        public PaymentCropController(IPaymentCropService service)
         {
             _service = service;
         }
 
-        [HttpGet, Route("workAreas")]
+        [HttpGet, Route("paymentCrop")]
         public IHttpActionResult List()
         {
             return Ok(_service.List());
         }
 
-        [HttpGet, Route("workAreas/{id}")]
+        [HttpGet, Route("paymentCrop/{id}")]
         public IHttpActionResult GetByIdFullModel(int id)
         {
             var model = _service.GetByIdFullModel(id);
@@ -45,10 +45,9 @@ namespace Backend.Controllers
             return Ok(model);
         }
 
-        [HttpGet, Route("workAreas/{id}/history")]
-        public IHttpActionResult GetHistoryById(int id)
+        public IHttpActionResult GetPaymentCropElementaryArea(int id)
         {
-            var model = _service.GetHistoryById(id);
+            var model = _service.GetPaymentCropElementaryArea(id);
             if (model == null)
             {
                 return NotFound();
@@ -56,5 +55,7 @@ namespace Backend.Controllers
 
             return Ok(model);
         }
+
+
     }
 }
