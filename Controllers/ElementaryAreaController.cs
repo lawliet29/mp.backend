@@ -1,15 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
 using Backend.Services;
+using Newtonsoft.Json;
 
 namespace Backend.Controllers
 {
-    public class ElementaryAreaController : ApiController
+    public class HttpGetAttribute : Attribute { }
+
+    public class RouteAttribute : Attribute
     {
+        private readonly string _path;
+
+        public RouteAttribute(string path)
+        {
+            _path = path;
+        }
+    }
+
+    public class ElementaryAreaController
+    {
+        public static string Ok(object value)
+        {
+            return JsonConvert.SerializeObject(value);
+        }
+
         private readonly IElementaryAreaService _service;
         public ElementaryAreaController(IElementaryAreaService service)
         {
@@ -17,53 +31,36 @@ namespace Backend.Controllers
         }
 
         [HttpGet, Route("elementaryAreas")]
-        public IHttpActionResult List()
+        public string List()
         {
-            return Ok(_service.List());
-        }
-
-        [HttpGet, Route("elementaryAreas/{id}")]
-        public IHttpActionResult GetByIdFullModel(int id)
-        {
-            var model = _service.GetByIdFullModel(id);
-            if (model == null)
+            return Ok(_service.LoadEverything().ToDictionary(kvp => kvp.Key, kvp => new
             {
-                return NotFound();
-            }
-
-            return Ok(model);
-        }
-
-        public IHttpActionResult GetByIdShort(int id)
-        {
-            var model = _service.GetByIdShort(id);
-            if (model == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(model);
+                id = kvp.Value.CommonInfo.Id,
+                name = kvp.Value.CommonInfo.Name,
+                points = Enumerable.Empty<object>(),
+                info = kvp.Value
+            }));
         }
 
         [HttpGet, Route("elementaryAreas/{id}/history")]
-        public IHttpActionResult GetHistoryById(int id)
+        public string GetHistoryById(int id)
         {
             var model = _service.GetHistoryById(id);
             if (model == null)
             {
-                return NotFound();
+                return null;
             }
 
             return Ok(model);
         }
 
         [HttpGet, Route("elementaryAreas/{id}/soilComposition")]
-        public IHttpActionResult GetSoilCompositionById(int id)
+        public string GetSoilCompositionById(int id)
         {
             var model = _service.GetElAreaSoilCompositionById(id);
             if (model == null)
             {
-                return NotFound();
+                return null;
             }
 
             return Ok(model);

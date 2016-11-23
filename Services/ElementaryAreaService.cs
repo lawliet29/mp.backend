@@ -1,87 +1,110 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Backend.Model;
+using Newtonsoft.Json;
 
 namespace Backend.Services
 {
-    public interface IElementaryAreaService
+    public class AggregateElementaryAreaModel
     {
-        ICollection<ElementaryAreaModel> List();
-        ElementaryAreaFullModel GetByIdShort(int id);
-        ElementaryAreaFullModel GetByIdFullModel(int id);
-        ICollection<ElementaryAreaHistoryIItem> GetHistoryById(int id);
-        ICollection<ElementaryAreaSoilComposition> GetElAreaSoilCompositionById(int id);
-        ICollection<ElementaryAreaModel> GetElementaryAreasByWorkAreaId(int id);
-        ICollection<ElementaryAreaModel> GetElementaryAreasByFieldId(int id);
+        [JsonProperty("Общая информация")]
+        public ElementaryAreaFullModel CommonInfo { get; set; }
+
+        [JsonProperty("Состав почвы")]
+        public IDictionary<int, ElementaryAreaSoilComposition> SoilComposition { get; set; } = new Dictionary<int, ElementaryAreaSoilComposition>();
+
+        [JsonProperty("История посевов")]
+        public IDictionary<int, ElementaryAreaHistoryIItem> History { get; set; } = new Dictionary<int, ElementaryAreaHistoryIItem>();
+
+        [JsonProperty("Расчет посевов")]
+        public IDictionary<int, PaymentCropFullModel> CropRecount { get; set; } = new Dictionary<int, PaymentCropFullModel>();
+
+        [JsonProperty("Минеральные удобрения")]
+        public MineralFertilizerFullModel MineralFertilizer { get; set; }
+
+        [JsonProperty("Органические удобрения")]
+        public OrganicFertilizerFullModel OrganicFertilizer { get; set; }
     }
 
-    public class ElementaryAreaService : IElementaryAreaService
+    public interface IElementaryAreaService
     {
-        public ICollection<ElementaryAreaModel> List()
+        ICollection<ElementaryAreaFullModel> List();
+        ICollection<ElementaryAreaHistoryIItem> GetHistoryById(int id);
+        ICollection<ElementaryAreaSoilComposition> GetElAreaSoilCompositionById(int id);
+        ICollection<PaymentCropFullModel> GetCropRecountById(int id);
+
+        IDictionary<int, AggregateElementaryAreaModel> LoadEverything();
+    }
+
+    public class ElementaryAreaService : IElementaryAreaService, IDisposable
+    {
+        private readonly IEntityLoader<ElementaryAreaFullModel> _elementaryAreaLoader;
+        private readonly IEntityLoader<ElementaryAreaHistoryIItem> _historyItemLoader;
+        private readonly IEntityLoader<ElementaryAreaSoilComposition> _soilCompositionLoader;
+        private readonly IEntityLoader<PaymentCropFullModel> _recountLoader;
+        private readonly IEntityLoader<MineralFertilizerFullModel> _mineralFertilizerLoader;
+        private readonly IEntityLoader<OrganicFertilizerFullModel> _organicFertilizerLoader;
+        private readonly IDbConnection _connection;
+
+        public ElementaryAreaService(
+            IDbConnectionService connectionService, 
+            IEntityLoader<ElementaryAreaFullModel> elementaryAreaLoader, 
+            IEntityLoader<ElementaryAreaHistoryIItem> historyItemLoader,
+            IEntityLoader<ElementaryAreaSoilComposition> soilCompositionLoader,
+            IEntityLoader<PaymentCropFullModel> recountLoader,
+            IEntityLoader<MineralFertilizerFullModel> mineralFertilizerLoader,
+            IEntityLoader<OrganicFertilizerFullModel> organicFertilizerLoader)
         {
-            return new[]
-            {
-                new ElementaryAreaModel {Id = 1, Name = "test"},
-                new ElementaryAreaModel {Id = 2, Name = "test2"}
-            };
+            _connection = connectionService.Connect();
+            _elementaryAreaLoader = elementaryAreaLoader;
+            _historyItemLoader = historyItemLoader;
+            _soilCompositionLoader = soilCompositionLoader;
+            _recountLoader = recountLoader;
+            _mineralFertilizerLoader = mineralFertilizerLoader;
+            _organicFertilizerLoader = organicFertilizerLoader;
         }
 
-        public ElementaryAreaFullModel GetByIdShort(int id)
+        public ICollection<ElementaryAreaFullModel> List()
         {
-            return new ElementaryAreaFullModel
-            {
-                Id = id,
-                Name = "testt",
-                Number = 42
-            };
-        }
-
-        public ElementaryAreaFullModel GetByIdFullModel(int id)
-        {
-            return new ElementaryAreaFullModel
-            {
-                Id = id,
-                Name = "testt",
-                Number = 42
-            };
+            return _elementaryAreaLoader.LoadList(_connection).ToList();
         }
 
         public ICollection<ElementaryAreaHistoryIItem> GetHistoryById(int id)
         {
-            return new[]
-            {
-                new ElementaryAreaHistoryIItem() {Id = 1, Year = 2011, AgroCulture = "", EaYield = 33, EaSeedMass = 44},
-                new ElementaryAreaHistoryIItem() {Id = 2, Year = 2012, AgroCulture = "", EaYield = 55, EaSeedMass = 66}
-            };
+            return _historyItemLoader.LoadList(_connection).Where(i => i.ElementaryAreaId == id).ToList();
         }
 
         public ICollection<ElementaryAreaSoilComposition> GetElAreaSoilCompositionById(int id)
         {
-            return new[]
-            {
-                new ElementaryAreaSoilComposition()  {Id = id, Year = 2012},
-                new ElementaryAreaSoilComposition()  {Id = id, Year = 2012}
-            };
+            return _soilCompositionLoader.LoadList(_connection).Where(c => c.ElementaryAreaId == id).ToList();
         }
 
-        public ICollection<ElementaryAreaModel> GetElementaryAreasByWorkAreaId(int id)
+        public ICollection<PaymentCropFullModel> GetCropRecountById(int id)
         {
-            return new[]
-            {
-                new ElementaryAreaModel() {Id = 1, Name = "Элементарный участок 1"},
-                new ElementaryAreaModel() {Id = 2, Name = "Элементарный участок 2"}
-            };
+            return _recountLoader.LoadList(_connection).Where(i => i.Id == id).ToList();
         }
-        public ICollection<ElementaryAreaModel> GetElementaryAreasByFieldId(int id)
+
+        public IDictionary<int, AggregateElementaryAreaModel> LoadEverything()
         {
-            return new[]
-            {
-                new ElementaryAreaModel() {Id = 1, Name = "Элементарный участок 1"},
-                new ElementaryAreaModel() {Id = 2, Name = "Элементарный участок 2"}
-            };
+            return List()
+                .ToDictionary(
+                l => l.Id,
+                l => new AggregateElementaryAreaModel
+                {
+                    CommonInfo = l,
+                    SoilComposition = GetElAreaSoilCompositionById(l.Id).ToDictionary(c => c.Year, c => c),
+                    History = GetHistoryById(l.Id).ToDictionary(h => h.Year, h => h),
+                    CropRecount = GetCropRecountById(l.Id).ToDictionary(r => r.Year, r => r),
+                    MineralFertilizer = _mineralFertilizerLoader.LoadList(_connection).FirstOrDefault(f => f.ElemAreaId == l.Id),
+                    OrganicFertilizer = _organicFertilizerLoader.LoadList(_connection).FirstOrDefault(f => f.ElemAreaId == l.Id)
+                });
+        }
+
+        public void Dispose()
+        {
+            _connection?.Dispose();
         }
     }
 }

@@ -1,9 +1,5 @@
 ﻿using Backend.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Backend.Model
 {
@@ -11,17 +7,21 @@ namespace Backend.Model
     public class FieldHistoryItem
     {
         [Column("FieldID")]
+        [JsonIgnore]
         public int Id { get; set; }
         [Column("Year")]
+        [JsonProperty("Год")]
         public int Year { get; set; }
         [Column("CropID")]
+        [JsonIgnore]
         public int CropId { get; set; }
         [RelationColumn(
             ReferenceId = "CropID",
             FromTable = "агроном_АгроКультуры",
-            PurposeId = "ID",
+            RemoteId = "ID",
             FromColumn = "Name"
         )]
+        [JsonProperty("Агрокультура")]
         public string AgroCulture { get; set; }
     }
 }

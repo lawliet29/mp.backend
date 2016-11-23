@@ -1,9 +1,5 @@
 ﻿using Backend.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Backend.Model
 {
@@ -11,10 +7,13 @@ namespace Backend.Model
     public class EmployeeModel
     {
         [Column("ID")]
+        [JsonIgnore]
         public int Id { get; set; }
         [Column("FIO")]
+        [JsonProperty("ФИО")]
         public string Name { get; set; }
         [Column("Password")]
+        [JsonIgnore]
         public string Password { get; set; }
     }
     

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Odbc;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
+using System.Data.OleDb;
 
 namespace Backend.Services
 {
@@ -15,9 +10,23 @@ namespace Backend.Services
 
     public class DbConnectionService : IDbConnectionService
     {
+        private readonly IDatabaseLocator _locator;
+
+        public DbConnectionService(IDatabaseLocator locator)
+        {
+            _locator = locator;
+        }
+
         public IDbConnection Connect()
         {
-            return new OdbcConnection();
+            var connection = new OleDbConnection
+            {
+                ConnectionString = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={_locator.LocateDatabase()}"
+            };
+
+            connection.Open();
+
+            return connection;
         }
     }
 }

@@ -1,43 +1,46 @@
 ﻿using Backend.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Backend.Model
 {
     [Table("агроном_Севообороты_Названия")]
     public class CropRotationModel
     {
-        [Column("ID")]
+        [Key, Column("ID")]
+        [JsonIgnore]
         public int Id { get; set; }
         [Column("Name")]
+        [JsonProperty("Название")]
         public string Name { get; set; }
         [Column("Type")]
+        [JsonIgnore]
         public int TypeId { get; set; }
         [RelationColumn(
             ReferenceId = "Type",
             FromTable = "_ТипыСевооборотов",
-            PurposeId = "ID",
+            RemoteId = "ID",
             FromColumn = "NameOfType"
         )]
+        [JsonProperty("Тип")]
         public string CropRotationType { get; set; }
 
     }
     [Table("агроном_Севообороты_Ротация")]
-    public class CropRotationFullModel : CropRotationModel
+    public class CropRotationFullModel
     {
         [Column("YearOfCycle")]
+        [JsonProperty("Год цикла")]
         public int YearOfCycle { get; set; }
-        [Column("CropID")]
+        [Key, Column("CropID")]
+        [JsonIgnore]
         public int CropId { get; set; }
         [RelationColumn(
             ReferenceId = "CropID",
             FromTable = "агроном_АгроКультуры",
-            PurposeId = "ID",
+            RemoteId = "ID",
             FromColumn = "Name"
         )]
+        [JsonProperty("Агрокультура")]
         public string AgroCulture { get; set; }
         
     }

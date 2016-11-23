@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Backend.Model;
 
 namespace Backend.Services
@@ -17,13 +13,21 @@ namespace Backend.Services
 
     public class WorkAreaService : IWorkAreaService
     {
+        private readonly IDbConnectionService _connectionService;
+        private readonly IEntityLoader<WorkAreaModel> _entityLoader;
+
+        public WorkAreaService(IDbConnectionService connectionService, IEntityLoader<WorkAreaModel> entityLoader)
+        {
+            _connectionService = connectionService;
+            _entityLoader = entityLoader;
+        }
+
         public ICollection<WorkAreaModel> List()
         {
-            return new[]
+            using (var connection = _connectionService.Connect())
             {
-                new WorkAreaModel {Id = 1, Name = "test"},
-                new WorkAreaModel {Id = 2, Name = "test2"}
-            };
+                return _entityLoader.LoadList(connection);
+            }
         }
 
         public WorkAreaFullModel GetByIdFullModel(int id)

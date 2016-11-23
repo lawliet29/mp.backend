@@ -1,9 +1,5 @@
 ﻿using Backend.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Backend.Model
 {
@@ -11,23 +7,28 @@ namespace Backend.Model
     public class PaymentCropElementaryAreaItem
     {
         [Column("OptimizationID")]
+        [JsonIgnore]
         public int Id { get; set; }
         [Column("EA_ID")]
+        [JsonIgnore]
         public int ElementaryAreaId { get; set; }
     }
     [Table("агроном_РасчетПосевов2")]
     public class PaymentCropElementaryAreaFullModel : AgroCultureModel
     {
         [Column("AgroCultureID")]
+        [JsonIgnore]
         public int AgroCultureId { get; set; }
         [RelationColumn(
             ReferenceId = "AgroCultureID",
             FromTable = "агроном_АгроКультуры",
-            PurposeId = "ID",
+            RemoteId = "ID",
             FromColumn = "ProductionType"
         )]
+        [JsonProperty("Агрокультура")]
         public string AgroCulture { get; set; }
         [Column("PlannedProductivity")]
+        [JsonProperty("Планируемая урожайность")]
         public int PlannedProductivity { get; set; }
         [Column("Ka_ToAdd")]
         public int KaToAdd { get; set; }

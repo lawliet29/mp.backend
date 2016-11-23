@@ -1,9 +1,5 @@
 ﻿using Backend.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Backend.Model
 {
@@ -11,17 +7,21 @@ namespace Backend.Model
     public class HarvestPlanElementaryAreaItem
     {
         [Column("PlanID")]
+        [JsonIgnore]
         public int Id { get; set; }
         [Column("AgroCultureID")]
+        [JsonIgnore]
         public int AgroCultureId { get; set; }
         [RelationColumn(
             ReferenceId = "AgroCultureID",
             FromTable = "агроном_АгроКультуры",
-            PurposeId = "ID",
+            RemoteId = "ID",
             FromColumn = "Name"
         )]
+        [JsonProperty("Агрокультура")]
         public string AgroCulture { get; set; }
         [Column("PlannedYield")]
+        [JsonProperty("Планируемый урожай")]
         public int PlannedYield { get; set; }
     }
     

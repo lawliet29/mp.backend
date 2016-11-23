@@ -1,9 +1,5 @@
 ﻿using Backend.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Backend.Services
 {
@@ -28,11 +24,7 @@ namespace Backend.Services
 
         public CropRotationFullModel GetByIdFullModel(int id)
         {
-            return new CropRotationFullModel
-            {
-                Id = id,
-                Name = "testt"
-            };
+            return new CropRotationFullModel();
         }
 
         public CropRotationModel GetByIdShort(int id)

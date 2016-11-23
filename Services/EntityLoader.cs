@@ -2,37 +2,33 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 
 namespace Backend.Services
 {
     public interface IEntityLoader<TEntity>
     {
-        TEntity Load(int id);
-        ICollection<TEntity> LoadList();
+        TEntity Load(int id, IDbConnection connection);
+        ICollection<TEntity> LoadList(IDbConnection connection);
     }
 
     public class EntityLoader<TEntity> : IEntityLoader<TEntity>
     {
-        private readonly IDbConnection _connection;
         private readonly IQueryBuilder _queryBuilder;
 
-        public EntityLoader(IDbConnection connection, IQueryBuilder queryBuilder)
+        public EntityLoader(IQueryBuilder queryBuilder)
         {
-            _connection = connection;
             _queryBuilder = queryBuilder;
         }
 
-        public TEntity Load(int id)
+        public TEntity Load(int id, IDbConnection connection)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<TEntity> LoadList()
+        public ICollection<TEntity> LoadList(IDbConnection connection)
         {
-            return _connection.Query<TEntity>(_queryBuilder.CreateQueryFor<TEntity>()).ToList();
+            return connection.Query<TEntity>(_queryBuilder.CreateQueryFor<TEntity>(), new {}).ToList();
         }
     }
 }

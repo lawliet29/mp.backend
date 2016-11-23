@@ -1,9 +1,6 @@
 ﻿using Backend.Metadata;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Backend.Model
 {
@@ -11,33 +8,43 @@ namespace Backend.Model
     public class MineralFertilizerModel
     {
         [Column("ElemAreaID")]
+        [JsonIgnore]
         public int ElemAreaId { get; set; }
         [Column("FertilizerCode")]
+        [JsonIgnore]
         public int FertilizerId { get; set; }
         [RelationColumn(
             ReferenceId = "FertilizerCode",
             FromTable = "_МинеральныеУдобрения",
-            PurposeId = "ID",
+            RemoteId = "ID",
             FromColumn = "Name"
         )]
+        [JsonProperty("Удобрение")]
         public string Fertilizer { get; set; }
     }
     [Table("агроном_ИсторияПолей_МинУдобрения")]
     public class MineralFertilizerFullModel : MineralFertilizerModel
     {
         [Column("FertilizationDate")]
-        public int FertilizationDate { get; set; }
+        [JsonProperty("Дата внесения")]
+        public DateTime FertilizationDate { get; set; }
         [Column("FertilizerWeight")]
+        [JsonProperty("Вес")]
         public int FertilizerWeight { get; set; }
         [Column("S")]
+        [JsonProperty("S")]
         public int S { get; set; }
         [Column("N")]
+        [JsonProperty("N")]
         public int N { get; set; }
         [Column("P2O5")]
+        [JsonProperty("P2O5")]
         public int P2O5 { get; set; }
         [Column("K2O")]
+        [JsonProperty("K2O")]
         public int K2O { get; set; }
         [Column("Price")]
+        [JsonProperty("Цена")]
         public int Price { get; set; }
         
     }

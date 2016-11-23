@@ -3,5 +3,7 @@
 namespace Backend.Metadata
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class KeyAttribute : Attribute { }
+    public class KeyAttribute : Attribute
+    {
+    }
 }
